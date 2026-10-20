@@ -38,6 +38,7 @@
 *.out
 *.app
 .scop
+scop
 
 # Build directories
 build/
