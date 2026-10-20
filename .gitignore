@@ -37,6 +37,7 @@
 *.exe
 *.out
 *.app
+.scop
 
 # Build directories
 build/
