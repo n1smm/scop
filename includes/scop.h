@@ -22,6 +22,7 @@
 #include "Shader.hpp"
 #include "Camera.hpp"
 #include "Mesh.hpp"
+#include "Texture.hpp"
 
 /* my utils */
 #include "common_values.h"

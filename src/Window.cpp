@@ -1,5 +1,27 @@
 #include "Window.hpp"
 
+static void GLAPIENTRY debugCallBack(GLenum source, GLenum type, GLuint id,
+									 GLenum severity, GLsizei length,
+									 const GLchar *message, const void *userParam)
+{
+	(void)id; (void)length; (void)userParam;
+
+	if (severity == GL_DEBUG_SEVERITY_NOTIFICATION)
+		return;                                  // spam filter
+
+	std::cerr << "[GL debug] severity=";
+	switch (severity)
+	{
+		case GL_DEBUG_SEVERITY_HIGH:   std::cerr << "HIGH";   break;
+		case GL_DEBUG_SEVERITY_MEDIUM: std::cerr << "MEDIUM"; break;
+		case GL_DEBUG_SEVERITY_LOW:    std::cerr << "LOW";    break;
+		default:                       std::cerr << "?";      break;
+	}
+	std::cerr << " source=" << source
+		<< " type="   << type
+		<< " msg: "   << message << std::endl;
+}
+
 Window::Window()
 {
 	_width = 0; _height = 0; _buffer_width = 0; _buffer_height = 0;
@@ -37,6 +59,8 @@ Window& Window::operator=(const Window& other)
     }
     return *this;
 }
+
+
 
 int	Window::initialize()
 {
@@ -79,6 +103,13 @@ int	Window::initialize()
 	glEnable(GL_DEPTH_TEST);
 	glViewport(0, 0, _buffer_width, _buffer_height);
 	glfwSetWindowUserPointer(_mainWindow, this);
+
+	if (GLEW_KHR_debug)
+	{
+		glEnable(GL_DEBUG_OUTPUT);
+		glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
+		glDebugMessageCallback(debugCallBack, nullptr);
+	}
 
 	return 0;
 }
