@@ -61,6 +61,8 @@ Texture	&Texture::operator=(Texture &&other)			noexcept
 	return *this;
 }
 
+Texture::operator bool() const { return isValid(); }
+
 
 
 /* public methods */
@@ -93,6 +95,9 @@ void	Texture::clearTexture()
 	_pixels = nullptr;
 
 }
+
+//getter
+bool	Texture::isValid() const { return _texture_id != 0; }
 
 
 /* private methods */

@@ -4,64 +4,44 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
-
+// #include <GL/gl.h>
 #include <utility>
 
+#include "vec3.hpp"
+#include "mat4.hpp"
+
 namespace mymath {
-	using mat4 = glm::mat4;
-	using vec3 = glm::vec3;
+	// using mat4 = glm::mat4;
+	// using vec3 = glm::vec3;
 	using vec4 = glm::vec4;
 
-	inline	mat4	rotate(const mat4 &mat, float angle, const vec3 &axis) 
-	{
-		return glm::rotate(mat, angle, axis);
-	}
 
-	inline	mat4	translate(const mat4 &mat, const vec3 &vec) 
-	{
-		return glm::translate(mat, vec);
-	}
+	mat4	rotate(const mat4 &mat, float angle, const vec3 &axis);
 
-	inline	mat4	scale(const mat4 &mat, const vec3 &vec) 
-	{
-		return glm::scale(mat, vec);
-	}
+	mat4	translate(const mat4 &mat, const vec3 &vec);
 
-	inline	mat4	perspective(float fovY, float aspect, float near, float far)
-	{
-		return glm::perspective(fovY, aspect, near, far);
-	}
+	mat4	scale(const mat4& m, const vec3& factors);
 
-	inline	mat4	lookAt(const vec3 &eye, const vec3& center, const vec3 &up)
-	{
-		return glm::lookAt(eye, center, up);
-	}
+	mat4	perspective(float fovy, float aspect, float zNear, float zFar);
 
-	inline	vec3	normalize(const vec3 &vec)
-	{
-		return glm::normalize(vec);
-	}
+	mat4	lookAt(const vec3 &eye, const vec3& center, const vec3 &up);
 
-	inline	vec3	cross(const vec3 &vecX, const vec3 &vecY)
-	{
-		return glm::cross(vecX, vecY);
-	}
+	vec3	normalize(const vec3 &vec);
 
-	inline	float	dot(const vec3 &vecX, const vec3 &vecY)
-	{
-		return glm::dot(vecX, vecY);
-	}
+	vec3	cross(const vec3 &vecX, const vec3 &vecY);
 
-	inline	float	radians(float degrees)
-	{
-		return glm::radians(degrees);
-	}
+	float	dot(const vec3 &vecX, const vec3 &vecY);
 
-	template	<typename T>
-	inline	auto	value_ptr(T &&obj) -> decltype(glm::value_ptr(std::forward<T>(obj)))
-	{
-		return glm::value_ptr(std::forward<T>(obj));
-	}
+	float	radians(float degrees);
+
+	float		*value_ptr(mat4 &m);
+	const float	*value_ptr(const mat4 &m);
+
+	// template	<typename T>
+	// inline	auto	value_ptr(T &&obj) -> decltype(glm::value_ptr(std::forward<T>(obj)))
+	// {
+	// 	return glm::value_ptr(std::forward<T>(obj));
+	// }
 }
 
 #endif

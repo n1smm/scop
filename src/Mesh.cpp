@@ -29,6 +29,8 @@ Mesh& Mesh::operator=(Mesh &&other)	noexcept
 
 }
 
+Mesh::operator bool() const { return isValid(); }
+
 
 void	Mesh::createMesh(GLfloat *vertices, unsigned int *indices, GLuint numVertices, GLuint numIndices)
 {
@@ -61,17 +63,37 @@ void	Mesh::createMesh(GLfloat *vertices, unsigned int *indices, GLuint numVertic
 	glBindVertexArray(0);
 }
 
-void	Mesh::renderMesh()
+void	Mesh::renderMesh(RenderMode mode)
 {
+	if (!isValid())
+		return ;
+
 	glBindVertexArray(_VAO);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _IBO);
-			glDrawElements(GL_TRIANGLES, _indexCount, GL_UNSIGNED_INT, 0);
+			switch (mode)
+			{
+				case RenderMode::FILLED:
+					glDrawElements(GL_TRIANGLES, _indexCount, GL_UNSIGNED_INT, 0);
+					break;
+				case RenderMode::POINTS:
+					glDrawElements(GL_POINTS, _indexCount, GL_UNSIGNED_INT, 0);
+					break;
+				case RenderMode::WIREFRAME:
+					glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+					glDrawElements(GL_TRIANGLES, _indexCount, GL_UNSIGNED_INT, 0);
+					glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+					break;
+
+
+			}
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
 }
 
 void	Mesh::clearMesh()
 {
+	_indexCount = 0;
+
 	if (_IBO != 0)
 	{
 		glDeleteBuffers(1, &_IBO);
@@ -88,6 +110,9 @@ void	Mesh::clearMesh()
 		_VAO = 0;
 	}
 }
+
+//getter
+bool	Mesh::isValid() const { return _VAO != 0 && _indexCount > 0; }
 
 
 

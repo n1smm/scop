@@ -10,8 +10,8 @@ class Window {
 public:
     Window();
     Window(GLint windowWidth, GLint windowHeight);
-    Window(const Window& other);
-    Window& operator=(const Window& other);
+    Window(const Window& other)			= delete;
+    Window& operator=(const Window& other)	= delete;
 
 	int		initialize();
 	void	swapBuffers();

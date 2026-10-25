@@ -2,7 +2,6 @@
 #include "scop.h"
 
 
-
 int main() 
 {
 	try {
@@ -32,6 +31,7 @@ int main()
 		uniform_projection = shader_list[0].getUniformProjectionLocation();
 		uniform_view = shader_list[0].getUniformViewLocation();
 
+		last_time = glfwGetTime();
 		while(!mainWindow.getWindowShouldClose())
 		{
 			GLfloat	now = glfwGetTime();
@@ -45,7 +45,7 @@ int main()
 					   		mainWindow.getYchange());
 			mainWindow.resetMouseDelta();
 
-			glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+			glClearColor(0.0f, 0.01f, 0.0f, 1.0f);
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 			shader_list[0].useShader();
@@ -58,7 +58,7 @@ int main()
 				// model = mymath::rotate(model, mymath::radians(45), mymath::vec3(0.0f, 1.0f, 0.0f));
 				glUniformMatrix4fv(uniform_model, 1, GL_FALSE, mymath::value_ptr(model));
 				tex.useTexture(0);	
-				mesh_list[0].renderMesh();
+				mesh_list[0].renderMesh(Mesh::RenderMode::FILLED);
 
 			glUseProgram(0);
 			mainWindow.swapBuffers();

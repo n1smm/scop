@@ -46,6 +46,7 @@ Shader& Shader::operator=(Shader&& other) noexcept
 	_uniform_model 		= std::exchange(other._uniform_model, 0);
 	_uniform_projection	= std::exchange(other._uniform_projection, 0);
 	_uniform_view		= std::exchange(other._uniform_view, 0);
+	_uniform_values		= std::move(other._uniform_values);
 
 	return *this;
 }
@@ -66,12 +67,12 @@ void	Shader::clearshader()
 	{
 		glDeleteProgram(_shader_id);
 		_shader_id = 0;
-		_shader_status = MY_SHADER_CLEARED;
-
-		_uniform_model = 0;
-		_uniform_projection = 0;
-		_uniform_view = 0;
 	}
+	_shader_status = MY_SHADER_CLEARED;
+
+	_uniform_model = 0;
+	_uniform_projection = 0;
+	_uniform_view = 0;
 }
 
 
@@ -94,7 +95,11 @@ void	Shader::_compileShader(const char *vertexCode, const char *fragmentCode)
 	}
 
 	_addShader(_shader_id, vertexCode, GL_VERTEX_SHADER);
+	if (_shader_status == MY_SHADER_FAIL)
+		return ;
 	_addShader(_shader_id, fragmentCode, GL_FRAGMENT_SHADER);
+	if (_shader_status == MY_SHADER_FAIL)
+		return ;
 
 	GLint	result = 0;
 	GLchar	log[1024] = { 0 };

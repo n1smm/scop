@@ -2,20 +2,24 @@
 #define TEXTURE_HPP
 
 #include	<GL/glew.h>
-#include	<std_libs.h>
-#include	<common_values.h>
+#include	"std_libs.h"
+#include	"common_values.h"
 
 class Texture {
 public:
     Texture();
-	Texture(const char *filePath);
+	explicit Texture(const char *filePath);
     Texture(const Texture& other)				= delete;
     Texture& operator=(const Texture& other)	= delete;
 	Texture(Texture &&other)					noexcept;
 	Texture	&operator=(Texture &&other)			noexcept;
+	explicit operator bool()					const;
 
 	void	useTexture(GLuint unit) const;
 	void	clearTexture();
+
+	//getter
+	bool	isValid()				const;
 
     ~Texture();
 

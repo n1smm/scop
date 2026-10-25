@@ -48,20 +48,6 @@ Window::Window(GLint windowWidth, GLint windowHeight)
 		_mouse_events[i] = 0;
 }
 
-Window::Window(const Window& other)
-{
-    (void)other;
-}
-
-Window& Window::operator=(const Window& other)
-{
-    if (this != &other) {
-    }
-    return *this;
-}
-
-
-
 int	Window::initialize()
 {
 	if (!glfwInit())
@@ -82,6 +68,7 @@ int	Window::initialize()
 	{
 		std::cerr << "window not created\n";
 		glfwTerminate();
+		_is_initialized = false;
 		return 1;
 	}
 
@@ -96,12 +83,15 @@ int	Window::initialize()
 	{
 		std::cerr << "glew initialization failed\n";
 		glfwDestroyWindow(_mainWindow);
+		_mainWindow = nullptr;
 		glfwTerminate();
+		_is_initialized = false;
 		return 1;
 	}
 
 	glEnable(GL_DEPTH_TEST);
 	glViewport(0, 0, _buffer_width, _buffer_height);
+	glPointSize(10.0f);
 	glfwSetWindowUserPointer(_mainWindow, this);
 
 	if (GLEW_KHR_debug)

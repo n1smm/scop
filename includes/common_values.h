@@ -3,11 +3,11 @@
 #include "types.h"
 #include <GL/gl.h>
 
-inline	constexpr		 	unsigned int WIDTH = 1366, HEIGHT = 768;
+constexpr		 	unsigned int WIDTH = 1366, HEIGHT = 768;
 
-inline	constexpr	const	char		*vShaderPath = "shaders/shader.vert";
-inline	constexpr	const	char		*fShaderPath = "shaders/shader.frag";
-inline	constexpr	const	char		*DEFAULT_TEX_PATH = "textures/default/plain.png";
+constexpr	const	char		*vShaderPath = "shaders/shader.vert";
+constexpr	const	char		*fShaderPath = "shaders/shader.frag";
+constexpr	const	char		*DEFAULT_TEX_PATH = "textures/default/plain.png";
 
 
 
