@@ -14,6 +14,7 @@ int main()
 		std::vector<Shader>	shader_list;
 		std::vector<Mesh>	mesh_list;
 		Texture				tex("textures/brick.png");
+		Model				new_model("models/x-wing.obj");
 
 		returnTmpMesh(&mesh_list);
 		shader_list.emplace_back(vShaderPath, fShaderPath);
@@ -54,11 +55,18 @@ int main()
 
 				mymath::mat4	model(1.0f);
 				// model = mymath::translate(model, mymath::vec3(0.0f, 0.4f, 0.0f));
-				model = mymath::scale(model, mymath::vec3(0.4f, 0.4f, 1.0f));
-				// model = mymath::rotate(model, mymath::radians(45), mymath::vec3(0.0f, 1.0f, 0.0f));
+				// model = mymath::scale(model, mymath::vec3(0.4f, 0.4f, 1.0f));
+				// // model = mymath::rotate(model, mymath::radians(45), mymath::vec3(0.0f, 1.0f, 0.0f));
+				// glUniformMatrix4fv(uniform_model, 1, GL_FALSE, mymath::value_ptr(model));
+				// tex.useTexture(0);	
+				// mesh_list[0].renderMesh(Mesh::RenderMode::FILLED);
+
+				// model = mymath::scale(model, mymath::vec3(1.0f, 1.0f, 1.0f));
+				model = mymath::scale(model, mymath::vec3(0.05f, 0.05f, 0.05f));
 				glUniformMatrix4fv(uniform_model, 1, GL_FALSE, mymath::value_ptr(model));
-				tex.useTexture(0);	
-				mesh_list[0].renderMesh(Mesh::RenderMode::FILLED);
+				new_model.renderModel();
+				
+				
 
 			glUseProgram(0);
 			mainWindow.swapBuffers();
