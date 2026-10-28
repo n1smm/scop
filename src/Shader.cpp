@@ -4,10 +4,13 @@ Shader::Shader(const char *vertexCodePath, const char *fragmentCodePath)
 {
 	_shader_id = 0;
 	_shader_status = MY_SHADER_EMPTY;
+	_surface_state = SurfaceState::TEXTURE;
 
 	_uniform_model = 0;
 	_uniform_projection = 0;
 	_uniform_view = 0;
+	_uniform_surface_switch = 0;
+	_uniform_in_color = 0;
 
 
 	std::string vertexContent = readFromfile(vertexCodePath);
@@ -27,9 +30,12 @@ Shader::Shader(const char *vertexCodePath, const char *fragmentCodePath)
 Shader::Shader(Shader&& other) noexcept
 	: _shader_id(std::exchange(other._shader_id, 0))
 	, _shader_status(std::exchange(other._shader_status, MY_SHADER_EMPTY))
+	, _surface_state(std::exchange(other._surface_state, SurfaceState::TEXTURE))
 	, _uniform_model(std::exchange(other._uniform_model, 0))
 	, _uniform_projection(std::exchange(other._uniform_projection, 0))
 	, _uniform_view(std::exchange(other._uniform_view, 0))
+	, _uniform_surface_switch(std::exchange(other._uniform_surface_switch, 1))
+	, _uniform_in_color(std::exchange(other._uniform_in_color, 0))
 	, _uniform_values(std::move(other._uniform_values))
 {}
 	
@@ -41,12 +47,15 @@ Shader& Shader::operator=(Shader&& other) noexcept
 
 	clearshader();
 
-	_shader_id			= std::exchange(other._shader_id, 0);
-	_shader_status		= std::exchange(other._shader_status, MY_SHADER_EMPTY);
-	_uniform_model 		= std::exchange(other._uniform_model, 0);
-	_uniform_projection	= std::exchange(other._uniform_projection, 0);
-	_uniform_view		= std::exchange(other._uniform_view, 0);
-	_uniform_values		= std::move(other._uniform_values);
+	_shader_id				= std::exchange(other._shader_id, 0);
+	_shader_status			= std::exchange(other._shader_status, MY_SHADER_EMPTY);
+	_surface_state			= std::exchange(other._surface_state, SurfaceState::TEXTURE);
+	_uniform_model 			= std::exchange(other._uniform_model, 0);
+	_uniform_projection		= std::exchange(other._uniform_projection, 0);
+	_uniform_view			= std::exchange(other._uniform_view, 0);
+	_uniform_surface_switch	= std::exchange(other._uniform_surface_switch, 1);
+	_uniform_in_color		= std::exchange(other._uniform_in_color, 0);
+	_uniform_values			= std::move(other._uniform_values);
 
 	return *this;
 }
@@ -73,13 +82,19 @@ void	Shader::clearshader()
 	_uniform_model = 0;
 	_uniform_projection = 0;
 	_uniform_view = 0;
+	_uniform_surface_switch = 0;
+	_uniform_in_color = 0;
 }
+
+void	Shader::setSurfaceState(SurfaceState newState) { _surface_state = newState; }
 
 
 /* getters */
 GLint	Shader::getUniformModelLocation() { return _uniform_model; }
 GLint	Shader::getUniformProjectionLocation() { return _uniform_projection; }
 GLint	Shader::getUniformViewLocation() { return _uniform_view; }
+GLint	Shader::getUniformSurfaceSwitchLocation() { return _uniform_surface_switch; }
+GLint	Shader::getUniformInColorLocation() { return _uniform_in_color; }
 
 
 /* private methods */
@@ -130,6 +145,9 @@ void	Shader::_compileShader(const char *vertexCode, const char *fragmentCode)
 	_uniform_values.push_back(_uniform_projection);
 	_uniform_view = glGetUniformLocation(_shader_id, "view");
 	_uniform_values.push_back(_uniform_view);
+	_uniform_surface_switch = glGetUniformLocation(_shader_id, "surfaceSwitch");
+	_uniform_values.push_back(_uniform_surface_switch);
+	_uniform_in_color = glGetUniformLocation(_shader_id, "inColor");
 
 	for(size_t i = 0; i < _uniform_values.size(); i++)
 	{

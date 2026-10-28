@@ -66,6 +66,16 @@ struct Material {
 		path->data = mDiffuseTex;
 		return AI_SUCCESS;
     }
+
+	aiReturn	GetColor(mymath::vec3 &diffuseColor)
+	{
+		if (mDiffuseColor.x || mDiffuseColor.y || mDiffuseColor.z)
+		{
+			diffuseColor = mDiffuseColor;
+			return AI_SUCCESS;
+		}
+		return AI_FAILURE;
+	}
 };
 
 /*
@@ -90,6 +100,8 @@ struct Mesh {
     Face*          mFaces             = nullptr;
     unsigned int   mNumFaces          = 0;
     unsigned int   mMaterialIndex     = 0;                    // into Scene::mMaterials
+	bool		   mTexValid		  = false;
+	bool		   mNormValid		  = false;
 };
 
 struct Node {

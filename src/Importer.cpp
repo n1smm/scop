@@ -285,6 +285,7 @@ void        Importer::_bake()
 
 	// set materials from raw mesh to mMaterials array
 	std::set<std::string>	mat_name;
+	//dedup material names
 	for (size_t i = 0; i < _raw_meshes.size(); i++)
 	{
 		mat_name.insert(_raw_meshes[i].material.empty() ? "default" :
@@ -292,6 +293,7 @@ void        Importer::_bake()
 	}
 	_scene.mNumMaterials = static_cast<unsigned int>(mat_name.size());
 
+	// create array of materials and a lookup table
 	_scene.mMaterials = new Material*[mat_name.size()];
 	std::map<std::string, unsigned int> mat_lookup;
 	size_t i = 0;
@@ -406,6 +408,8 @@ void	Importer::_bakeMesh(RawMesh &rawMesh, Mesh &newMesh)
 	newMesh.mTextureCoords[0] 	= new mymath::vec3[vCount];
 	newMesh.mFaces 				= new Face[triCount];
 
+	size_t validTex		= 0;
+	size_t validNorm	= 0;
 	vCount = 0;
 	triCount = 0;
 	// bake the vertices, uvs and normals into the new mesh
@@ -415,6 +419,7 @@ void	Importer::_bakeMesh(RawMesh &rawMesh, Mesh &newMesh)
 		bool			valid = true;
 		if (face.corners.size() < 3) continue;
 
+		//skip if indice is faulty
 		for (size_t j = 0; j < face.corners.size(); j++)
 		{
 	   		const RawCorner &corner = face.corners[j];
@@ -434,18 +439,23 @@ void	Importer::_bakeMesh(RawMesh &rawMesh, Mesh &newMesh)
 			newMesh.mVertices[vCount] = _vertices[corner.v -1];
 			
 			if (corner.vn >= 1 && static_cast<size_t>(corner.vn) <= _normals.size())
+			{
 				newMesh.mNormals[vCount] = _normals[corner.vn -1];
+				validNorm++;
+			}
 
 			if (corner.vt >= 1 && static_cast<size_t>(corner.vt) <= _uvs.size())
 			{
 				newMesh.mTextureCoords[0][vCount] = mymath::vec3(_uvs[corner.vt -1].x
 											 			, _uvs[corner.vt -1].y
 											 			, 0.0f);
+				validTex++;
 			}
 			vCount++;
 		}
 
 		// add face indices that reference vertex data
+		// creates 2 triangles from a 4 point indices line (fan triangulation)
 		for (size_t k = 1; k +1 < face.corners.size(); k++)
 		{
 			Face &new_face = newMesh.mFaces[triCount++];
@@ -456,6 +466,11 @@ void	Importer::_bakeMesh(RawMesh &rawMesh, Mesh &newMesh)
 			new_face.mIndices[2] = static_cast<unsigned int>(base + k + 1);
 		}
 	}
+	// are there enough uv and normals data
+	if (vCount / 2 < validTex)
+		newMesh.mTexValid = true;
+	if (vCount / 2 < validNorm)
+		newMesh.mNormValid = true;
 }
 
 void        Importer::_clearScene()
