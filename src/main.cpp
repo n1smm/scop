@@ -2,9 +2,18 @@
 #include "scop.h"
 
 
-int main() 
+int main(int argc, char **argv) 
 {
 	try {
+		if (argc != 2)
+		{
+			std::cerr << "usage: ./scop <model.obj>" << std::endl;
+			return 1;
+		}
+		std::string model_path = std::string(argv[1]);
+		if (model_path.empty())
+			return 1;
+
 		Window mainWindow(WIDTH, HEIGHT);
 		if (mainWindow.initialize() != 0)
 			return 1;
@@ -14,7 +23,14 @@ int main()
 		std::vector<Shader>	shader_list;
 		std::vector<Mesh>	mesh_list;
 		Texture				tex("textures/brick.png");
-		Model				new_model("models/teapot2.obj");
+		// Model				new_model("models/teapot2.obj");
+		Model				new_model(model_path.c_str());
+
+		if (!new_model.isValid())
+		{
+			std::cerr << "invalid model: " << model_path << std::endl;
+			throw std::runtime_error("stopping program");
+		}
 
 		returnTmpMesh(&mesh_list);
 		shader_list.emplace_back(vShaderPath, fShaderPath);
