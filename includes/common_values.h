@@ -9,6 +9,14 @@ constexpr	const	char		*vShaderPath = "shaders/shader.vert";
 constexpr	const	char		*fShaderPath = "shaders/shader.frag";
 constexpr	const	char		*DEFAULT_TEX_PATH = "textures/default/plain.png";
 
+enum SurfaceState {
+	COLOR,
+	TEXTURE,
+	POINT,
+	WIREFRAME,
+	COUNT
+};
+
 
 
 #endif

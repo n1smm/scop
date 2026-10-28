@@ -1,0 +1,9 @@
+newmtl a
+map_Kd  
+newmtl b
+map_Kd	tabbed.png	
+newmtl c
+map_Kd with spaces in name.png
+newmtl d
+map_Kd clean.png # comment
+map_Kd second.png

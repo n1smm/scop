@@ -91,7 +91,7 @@ int	Window::initialize()
 
 	glEnable(GL_DEPTH_TEST);
 	glViewport(0, 0, _buffer_width, _buffer_height);
-	glPointSize(10.0f);
+	glPointSize(3.0f);
 	glfwSetWindowUserPointer(_mainWindow, this);
 
 	if (GLEW_KHR_debug)

@@ -16,10 +16,13 @@ public:
 
 	GLint	getUniformModelLocation();
 	GLint	getUniformProjectionLocation();
+	GLint	getUniformSurfaceSwitchLocation();
 	GLint	getUniformViewLocation();
+	GLint	getUniformInColorLocation();
 
 	void	useShader();
 	void	clearshader();
+	void	setSurfaceState(SurfaceState newState);
 
 
     ~Shader();
@@ -27,7 +30,9 @@ public:
 private:
 	GLuint				_shader_id;
 	unsigned int		_shader_status;
+	SurfaceState		_surface_state;
 	GLint				_uniform_model, _uniform_projection, _uniform_view;
+	GLint				_uniform_surface_switch, _uniform_in_color;
 	std::vector<GLint>	_uniform_values;
 
 	enum ShaderCodes {

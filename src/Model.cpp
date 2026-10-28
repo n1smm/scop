@@ -11,8 +11,6 @@ static std::string findTexturePath(const std::string& dir, const std::string& fi
     if (std::filesystem::exists(exact))
         return exact.string();
 
-    // Linux is case-sensitive, but .mtl files often reference textures
-    // with different casing (ENGINE2.TGA vs ENGINE2.tga).
     std::filesystem::path current = base;
     for (const auto& part : std::filesystem::path(fileName))
     {
@@ -43,26 +41,13 @@ static std::string findTexturePath(const std::string& dir, const std::string& fi
 }
 
 
-Model::Model(const char *filePath) : _isLoaded(false)
+Model::Model(const char *filePath) : _isLoaded(false), _current_surface(SurfaceState::TEXTURE), _space_latch(false)
 {
 	_loadModel(filePath);
 }
 
-// Model::Model(Model&& other) noexcept
-// {
-//     (void)other;
-// }
-
-// Model& Model::operator=(Model&& other) noexcept
-// {
-//     if (this != &other) {
-//     }
-//     return *this;
-// }
-
-
 /* public methods */
-void	Model::renderModel()
+void	Model::renderModel(GLint inColorLocation)
 {
 	if (!_isLoaded)
 		return ;
@@ -74,8 +59,20 @@ void	Model::renderModel()
 
 		unsigned int material_idx = _mesh_to_tex[i];
 		if (material_idx < _textureList.size() && _textureList[material_idx].isValid())
+		{
 			_textureList[material_idx].useTexture(0);
-		_meshList[i].renderMesh();
+			if (inColorLocation != -1)
+			{
+				mymath::vec3 &tmp = _colorList[material_idx];
+				glUniform3f(inColorLocation, tmp.x, tmp.y, tmp.z);
+			}
+		}
+		if (_current_surface == SurfaceState::TEXTURE || _current_surface == SurfaceState::COLOR)
+			_meshList[i].renderMesh(Mesh::RenderMode::FILLED);
+		if (_current_surface == SurfaceState::WIREFRAME)
+			_meshList[i].renderMesh(Mesh::RenderMode::WIREFRAME);
+		if (_current_surface == SurfaceState::POINT)
+			_meshList[i].renderMesh(Mesh::RenderMode::POINTS);
 	}
 
 }
@@ -88,11 +85,22 @@ void	Model::clearModel()
 	_mesh_to_tex.clear();
 }
 
-bool	Model::isValid() const
-{
-	return _isLoaded;
-}
+bool			Model::isValid() const { return _isLoaded; }
 
+SurfaceState	Model::getSurfaceState() const { return _current_surface; }
+
+void			Model::setSurfaceState(bool *keys)
+{ 
+	bool space_key = keys[GLFW_KEY_SPACE];
+	if (keys[GLFW_KEY_SPACE] && !_space_latch)
+	{
+		GLint size = static_cast<GLint>(SurfaceState::COUNT);
+		GLint next_step = (static_cast<GLint>(_current_surface) + 1) % size;
+		_current_surface = static_cast<SurfaceState>(next_step);
+	}
+	_space_latch = space_key;
+
+}
 
 
 /* private methods */
@@ -165,11 +173,20 @@ void	Model::_loadMesh(mymodel::Mesh *mesh, const mymodel::Scene *scene)
 	  									  mesh->mVertices[i].y,
 	  									  mesh->mVertices[i].z });
 
-		if (mesh->mTextureCoords[0])
+		if (mesh->mTextureCoords[0] && mesh->mTexValid)
 			vertices.insert(vertices.end(), { mesh->mTextureCoords[0][i].x,
 				mesh->mTextureCoords[0][i].y });
 		else	
-			vertices.insert(vertices.end(), { 0.0f, 0.0f});
+		{
+			size_t corner = i % 3;
+			if (corner == 0)
+				vertices.insert(vertices.end(), { 0.0f, 0.0f});
+			else if (corner == 1)
+				vertices.insert(vertices.end(), { 1.0f, 0.0f});
+			else
+				vertices.insert(vertices.end(), { 0.0f, 1.0f});
+
+		}
 
 		if (has_normals)
 			vertices.insert(vertices.end(), { mesh->mNormals[i].x,
@@ -209,6 +226,7 @@ void	Model::_loadMaterials(const mymodel::Scene *scene)
 		return ;
 
 	_textureList.resize(scene->mNumMaterials);
+	_colorList.resize(scene->mNumMaterials);
 
 	for (size_t i = 0; i < scene->mNumMaterials; i++)
 	{
@@ -236,6 +254,9 @@ void	Model::_loadMaterials(const mymodel::Scene *scene)
 				}
 			}
 		}
+		mymath::vec3 color;
+		if (material->GetColor(color) == AI_SUCCESS)
+			_colorList[i] = color;
 	}
 }
 

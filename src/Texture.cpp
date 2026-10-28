@@ -104,9 +104,6 @@ bool	Texture::isValid() const { return _texture_id != 0; }
 
 bool			Texture::_loadFile(const char *filePath)
 {
-	// Force STBI_rgb_alpha so _pixels is always 4 bytes/pixel (RGBA),
-	// whatever the file's native channel count. _bit_depth still receives
-	// the FILE's native channel count (info only, not used for the upload).
 	unsigned char *tex_data = stbi_load(filePath, &_width, &_height, &_bit_depth, STBI_rgb_alpha);
 
 	if (!tex_data)
@@ -148,7 +145,7 @@ bool			Texture::_loadTexture()
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 		
-		while (glGetError() != GL_NO_ERROR)	// drain stale errors
+		while (glGetError() != GL_NO_ERROR)
 			;
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, _width, _height, 0, GL_RGBA, GL_UNSIGNED_BYTE, _pixels);
 		glGenerateMipmap(GL_TEXTURE_2D);

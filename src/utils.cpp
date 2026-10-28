@@ -1,6 +1,34 @@
 #include "utils.h"
 
 
+constexpr	bool is_ws(char c)
+{
+	return (c == ' '
+		 	|| c == '\t'
+		 	|| c == '\r'
+		 	|| c == '\n'
+		 	|| c == '\v'
+		 	|| c == '\f');
+}
+
+std::vector<std::string_view> split_line(std::string_view str) {
+	std::vector<std::string_view> tokens;
+	for (size_t i = 0; i < str.size(); i++)
+	{
+		while (i < str.size() && is_ws(str[i]))
+			i++;
+
+		size_t j = i;
+		while(i < str.size() && !is_ws(str[i]))
+			i++;
+
+		if (i > j)
+			tokens.push_back(str.substr(j, i - j));
+	}
+	return tokens;
+}
+
+
 std::string	readFromfile(const char *filePath)
 {
 	std::string 	content = "";
