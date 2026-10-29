@@ -1,0 +1,46 @@
+HEAP SUMMARY:
+==1326656==     in use at exit: 92,124 bytes in 951 blocks
+==1326656==   total heap usage: 25,770 allocs, 24,819 frees, 1,007,598,693 bytes allocated
+==1326656== 
+==1326656== 0 bytes in 4 blocks are definitely lost in loss record 1 of 109
+==1326656==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==1326656==    by 0x4005A22: malloc (rtld-malloc.h:56)
+==1326656==    by 0x4005A22: _dl_find_object_update (dl-find_object.c:791)
+==1326656==    by 0x400ECCF: dl_open_worker_begin (dl-open.c:735)
+==1326656==    by 0x4E10B57: _dl_catch_exception (dl-error-skeleton.c:208)
+==1326656==    by 0x400DF99: dl_open_worker (dl-open.c:782)
+==1326656==    by 0x4E10B57: _dl_catch_exception (dl-error-skeleton.c:208)
+==1326656==    by 0x400E34D: _dl_open (dl-open.c:883)
+==1326656==    by 0x4D2C5FB: dlopen_doit (dlopen.c:56)
+==1326656==    by 0x4E10B57: _dl_catch_exception (dl-error-skeleton.c:208)
+==1326656==    by 0x4E10C22: _dl_catch_error (dl-error-skeleton.c:227)
+==1326656==    by 0x4D2C0ED: _dlerror_run (dlerror.c:138)
+==1326656==    by 0x4D2C687: dlopen_implementation (dlopen.c:71)
+==1326656==    by 0x4D2C687: dlopen@@GLIBC_2.34 (dlopen.c:81)
+==1326656== 
+==1326656== 2,046 (184 direct, 1,862 indirect) bytes in 1 blocks are definitely lost in loss record 98 of 109
+==1326656==    at 0x484DA83: calloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==1326656==    by 0xF9D616F: ??? (in /usr/lib/x86_64-linux-gnu/libdbus-1.so.3.19.13)
+==1326656==    by 0xF9D810A: _dbus_message_loader_queue_messages (in /usr/lib/x86_64-linux-gnu/libdbus-1.so.3.19.13)
+==1326656==    by 0xF9E081F: ??? (in /usr/lib/x86_64-linux-gnu/libdbus-1.so.3.19.13)
+==1326656==    by 0xF9E095C: ??? (in /usr/lib/x86_64-linux-gnu/libdbus-1.so.3.19.13)
+==1326656==    by 0xF9E27B0: ??? (in /usr/lib/x86_64-linux-gnu/libdbus-1.so.3.19.13)
+==1326656==    by 0xF9E2C9C: ??? (in /usr/lib/x86_64-linux-gnu/libdbus-1.so.3.19.13)
+==1326656==    by 0xF9C75EC: ??? (in /usr/lib/x86_64-linux-gnu/libdbus-1.so.3.19.13)
+==1326656==    by 0xF9DBDCB: dbus_pending_call_block (in /usr/lib/x86_64-linux-gnu/libdbus-1.so.3.19.13)
+==1326656==    by 0xF9C93BD: dbus_connection_send_with_reply_and_block (in /usr/lib/x86_64-linux-gnu/libdbus-1.so.3.19.13)
+==1326656==    by 0xF9C965B: dbus_bus_register (in /usr/lib/x86_64-linux-gnu/libdbus-1.so.3.19.13)
+==1326656==    by 0xF9C9913: ??? (in /usr/lib/x86_64-linux-gnu/libdbus-1.so.3.19.13)
+==1326656== 
+==1326656== LEAK SUMMARY:
+==1326656==    definitely lost: 184 bytes in 5 blocks
+==1326656==    indirectly lost: 1,862 bytes in 2 blocks
+==1326656==      possibly lost: 0 bytes in 0 blocks
+==1326656==    still reachable: 53,695 bytes in 782 blocks
+==1326656==         suppressed: 36,383 bytes in 162 blocks
+==1326656== Reachable blocks (those to which a pointer was found) are not shown.
+==1326656== To see them, rerun with: --leak-check=full --show-leak-kinds=all
+==1326656== 
+==1326656== For lists of detected and suppressed errors, rerun with: -s
+==1326656== ERROR SUMMARY: 2 errors from 2 contexts (suppressed: 0 from 0)
+
