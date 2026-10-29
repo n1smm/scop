@@ -1,0 +1,54 @@
+{
+   <GLFW driver allocations>
+   Memcheck:Leak
+   match-leak-kinds: possible
+   fun:malloc
+   fun:calloc
+   fun:realloc
+   obj:/usr/lib/*/libGL*
+   obj:/usr/lib/*/libglvnd*
+}
+
+{
+   <GLFW NVIDIA driver>
+   Memcheck:Leak
+   match-leak-kinds: possible
+   fun:malloc
+   obj:/usr/lib/*/libnvidia*
+}
+
+{
+   <GLFW misc driver>
+   Memcheck:Leak
+   match-leak-kinds: possible
+   fun:malloc
+   obj:/lib/x86_64-linux-gnu/libc*
+}
+{
+  mesa-gallium-leaks
+  Memcheck:Leak
+  match-leak-kinds: possible,reachable
+  ...
+  obj:/usr/lib/x86_64-linux-gnu/libgallium-*.so
+}
+{
+  mesa-glx-leaks
+  Memcheck:Leak
+  match-leak-kinds: possible,reachable
+  ...
+  obj:/usr/lib/x86_64-linux-gnu/libGLX_mesa.so*
+}
+{
+  mesa-glx-generic-leaks
+  Memcheck:Leak
+  match-leak-kinds: possible,reachable
+  ...
+  obj:/usr/lib/x86_64-linux-gnu/libGLX.so*
+}
+{
+  glfw-leaks
+  Memcheck:Leak
+  match-leak-kinds: possible,reachable
+  ...
+  obj:/usr/lib/x86_64-linux-gnu/libglfw.so*
+}

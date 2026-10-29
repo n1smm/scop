@@ -1,0 +1,8 @@
+newmtl dup
+Kd 1 0 0
+map_Kd first.png
+newmtl dup
+Kd 0 1 0
+map_Kd second.png
+newmtl other
+Kd 0 0 1
