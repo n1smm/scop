@@ -44,3 +44,18 @@ HEAP SUMMARY:
 ==1326656== For lists of detected and suppressed errors, rerun with: -s
 ==1326656== ERROR SUMMARY: 2 errors from 2 contexts (suppressed: 0 from 0)
 
+{
+      <glibc rtld dlopen cache (false positive)>
+      Memcheck:Leak
+      match-leak-kinds: definite
+      fun:malloc
+      fun:_dl_find_object_update
+   }
+
+   {
+      <libdbus process-wide allocations>
+      Memcheck:Leak
+      match-leak-kinds: definite,indirect
+      ...
+      obj:*/libdbus-1.so*
+   }
