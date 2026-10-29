@@ -1,0 +1,604 @@
+v 0 0 0
+v 1 0 0
+v 0 1 0
+v 1 1 0
+g group_1
+f 1 2 3
+g group_2
+f 1 2 3
+g group_3
+f 1 2 3
+g group_4
+f 1 2 3
+g group_5
+f 1 2 3
+g group_6
+f 1 2 3
+g group_7
+f 1 2 3
+g group_8
+f 1 2 3
+g group_9
+f 1 2 3
+g group_10
+f 1 2 3
+g group_11
+f 1 2 3
+g group_12
+f 1 2 3
+g group_13
+f 1 2 3
+g group_14
+f 1 2 3
+g group_15
+f 1 2 3
+g group_16
+f 1 2 3
+g group_17
+f 1 2 3
+g group_18
+f 1 2 3
+g group_19
+f 1 2 3
+g group_20
+f 1 2 3
+g group_21
+f 1 2 3
+g group_22
+f 1 2 3
+g group_23
+f 1 2 3
+g group_24
+f 1 2 3
+g group_25
+f 1 2 3
+g group_26
+f 1 2 3
+g group_27
+f 1 2 3
+g group_28
+f 1 2 3
+g group_29
+f 1 2 3
+g group_30
+f 1 2 3
+g group_31
+f 1 2 3
+g group_32
+f 1 2 3
+g group_33
+f 1 2 3
+g group_34
+f 1 2 3
+g group_35
+f 1 2 3
+g group_36
+f 1 2 3
+g group_37
+f 1 2 3
+g group_38
+f 1 2 3
+g group_39
+f 1 2 3
+g group_40
+f 1 2 3
+g group_41
+f 1 2 3
+g group_42
+f 1 2 3
+g group_43
+f 1 2 3
+g group_44
+f 1 2 3
+g group_45
+f 1 2 3
+g group_46
+f 1 2 3
+g group_47
+f 1 2 3
+g group_48
+f 1 2 3
+g group_49
+f 1 2 3
+g group_50
+f 1 2 3
+g group_51
+f 1 2 3
+g group_52
+f 1 2 3
+g group_53
+f 1 2 3
+g group_54
+f 1 2 3
+g group_55
+f 1 2 3
+g group_56
+f 1 2 3
+g group_57
+f 1 2 3
+g group_58
+f 1 2 3
+g group_59
+f 1 2 3
+g group_60
+f 1 2 3
+g group_61
+f 1 2 3
+g group_62
+f 1 2 3
+g group_63
+f 1 2 3
+g group_64
+f 1 2 3
+g group_65
+f 1 2 3
+g group_66
+f 1 2 3
+g group_67
+f 1 2 3
+g group_68
+f 1 2 3
+g group_69
+f 1 2 3
+g group_70
+f 1 2 3
+g group_71
+f 1 2 3
+g group_72
+f 1 2 3
+g group_73
+f 1 2 3
+g group_74
+f 1 2 3
+g group_75
+f 1 2 3
+g group_76
+f 1 2 3
+g group_77
+f 1 2 3
+g group_78
+f 1 2 3
+g group_79
+f 1 2 3
+g group_80
+f 1 2 3
+g group_81
+f 1 2 3
+g group_82
+f 1 2 3
+g group_83
+f 1 2 3
+g group_84
+f 1 2 3
+g group_85
+f 1 2 3
+g group_86
+f 1 2 3
+g group_87
+f 1 2 3
+g group_88
+f 1 2 3
+g group_89
+f 1 2 3
+g group_90
+f 1 2 3
+g group_91
+f 1 2 3
+g group_92
+f 1 2 3
+g group_93
+f 1 2 3
+g group_94
+f 1 2 3
+g group_95
+f 1 2 3
+g group_96
+f 1 2 3
+g group_97
+f 1 2 3
+g group_98
+f 1 2 3
+g group_99
+f 1 2 3
+g group_100
+f 1 2 3
+g group_101
+f 1 2 3
+g group_102
+f 1 2 3
+g group_103
+f 1 2 3
+g group_104
+f 1 2 3
+g group_105
+f 1 2 3
+g group_106
+f 1 2 3
+g group_107
+f 1 2 3
+g group_108
+f 1 2 3
+g group_109
+f 1 2 3
+g group_110
+f 1 2 3
+g group_111
+f 1 2 3
+g group_112
+f 1 2 3
+g group_113
+f 1 2 3
+g group_114
+f 1 2 3
+g group_115
+f 1 2 3
+g group_116
+f 1 2 3
+g group_117
+f 1 2 3
+g group_118
+f 1 2 3
+g group_119
+f 1 2 3
+g group_120
+f 1 2 3
+g group_121
+f 1 2 3
+g group_122
+f 1 2 3
+g group_123
+f 1 2 3
+g group_124
+f 1 2 3
+g group_125
+f 1 2 3
+g group_126
+f 1 2 3
+g group_127
+f 1 2 3
+g group_128
+f 1 2 3
+g group_129
+f 1 2 3
+g group_130
+f 1 2 3
+g group_131
+f 1 2 3
+g group_132
+f 1 2 3
+g group_133
+f 1 2 3
+g group_134
+f 1 2 3
+g group_135
+f 1 2 3
+g group_136
+f 1 2 3
+g group_137
+f 1 2 3
+g group_138
+f 1 2 3
+g group_139
+f 1 2 3
+g group_140
+f 1 2 3
+g group_141
+f 1 2 3
+g group_142
+f 1 2 3
+g group_143
+f 1 2 3
+g group_144
+f 1 2 3
+g group_145
+f 1 2 3
+g group_146
+f 1 2 3
+g group_147
+f 1 2 3
+g group_148
+f 1 2 3
+g group_149
+f 1 2 3
+g group_150
+f 1 2 3
+g group_151
+f 1 2 3
+g group_152
+f 1 2 3
+g group_153
+f 1 2 3
+g group_154
+f 1 2 3
+g group_155
+f 1 2 3
+g group_156
+f 1 2 3
+g group_157
+f 1 2 3
+g group_158
+f 1 2 3
+g group_159
+f 1 2 3
+g group_160
+f 1 2 3
+g group_161
+f 1 2 3
+g group_162
+f 1 2 3
+g group_163
+f 1 2 3
+g group_164
+f 1 2 3
+g group_165
+f 1 2 3
+g group_166
+f 1 2 3
+g group_167
+f 1 2 3
+g group_168
+f 1 2 3
+g group_169
+f 1 2 3
+g group_170
+f 1 2 3
+g group_171
+f 1 2 3
+g group_172
+f 1 2 3
+g group_173
+f 1 2 3
+g group_174
+f 1 2 3
+g group_175
+f 1 2 3
+g group_176
+f 1 2 3
+g group_177
+f 1 2 3
+g group_178
+f 1 2 3
+g group_179
+f 1 2 3
+g group_180
+f 1 2 3
+g group_181
+f 1 2 3
+g group_182
+f 1 2 3
+g group_183
+f 1 2 3
+g group_184
+f 1 2 3
+g group_185
+f 1 2 3
+g group_186
+f 1 2 3
+g group_187
+f 1 2 3
+g group_188
+f 1 2 3
+g group_189
+f 1 2 3
+g group_190
+f 1 2 3
+g group_191
+f 1 2 3
+g group_192
+f 1 2 3
+g group_193
+f 1 2 3
+g group_194
+f 1 2 3
+g group_195
+f 1 2 3
+g group_196
+f 1 2 3
+g group_197
+f 1 2 3
+g group_198
+f 1 2 3
+g group_199
+f 1 2 3
+g group_200
+f 1 2 3
+g group_201
+f 1 2 3
+g group_202
+f 1 2 3
+g group_203
+f 1 2 3
+g group_204
+f 1 2 3
+g group_205
+f 1 2 3
+g group_206
+f 1 2 3
+g group_207
+f 1 2 3
+g group_208
+f 1 2 3
+g group_209
+f 1 2 3
+g group_210
+f 1 2 3
+g group_211
+f 1 2 3
+g group_212
+f 1 2 3
+g group_213
+f 1 2 3
+g group_214
+f 1 2 3
+g group_215
+f 1 2 3
+g group_216
+f 1 2 3
+g group_217
+f 1 2 3
+g group_218
+f 1 2 3
+g group_219
+f 1 2 3
+g group_220
+f 1 2 3
+g group_221
+f 1 2 3
+g group_222
+f 1 2 3
+g group_223
+f 1 2 3
+g group_224
+f 1 2 3
+g group_225
+f 1 2 3
+g group_226
+f 1 2 3
+g group_227
+f 1 2 3
+g group_228
+f 1 2 3
+g group_229
+f 1 2 3
+g group_230
+f 1 2 3
+g group_231
+f 1 2 3
+g group_232
+f 1 2 3
+g group_233
+f 1 2 3
+g group_234
+f 1 2 3
+g group_235
+f 1 2 3
+g group_236
+f 1 2 3
+g group_237
+f 1 2 3
+g group_238
+f 1 2 3
+g group_239
+f 1 2 3
+g group_240
+f 1 2 3
+g group_241
+f 1 2 3
+g group_242
+f 1 2 3
+g group_243
+f 1 2 3
+g group_244
+f 1 2 3
+g group_245
+f 1 2 3
+g group_246
+f 1 2 3
+g group_247
+f 1 2 3
+g group_248
+f 1 2 3
+g group_249
+f 1 2 3
+g group_250
+f 1 2 3
+g group_251
+f 1 2 3
+g group_252
+f 1 2 3
+g group_253
+f 1 2 3
+g group_254
+f 1 2 3
+g group_255
+f 1 2 3
+g group_256
+f 1 2 3
+g group_257
+f 1 2 3
+g group_258
+f 1 2 3
+g group_259
+f 1 2 3
+g group_260
+f 1 2 3
+g group_261
+f 1 2 3
+g group_262
+f 1 2 3
+g group_263
+f 1 2 3
+g group_264
+f 1 2 3
+g group_265
+f 1 2 3
+g group_266
+f 1 2 3
+g group_267
+f 1 2 3
+g group_268
+f 1 2 3
+g group_269
+f 1 2 3
+g group_270
+f 1 2 3
+g group_271
+f 1 2 3
+g group_272
+f 1 2 3
+g group_273
+f 1 2 3
+g group_274
+f 1 2 3
+g group_275
+f 1 2 3
+g group_276
+f 1 2 3
+g group_277
+f 1 2 3
+g group_278
+f 1 2 3
+g group_279
+f 1 2 3
+g group_280
+f 1 2 3
+g group_281
+f 1 2 3
+g group_282
+f 1 2 3
+g group_283
+f 1 2 3
+g group_284
+f 1 2 3
+g group_285
+f 1 2 3
+g group_286
+f 1 2 3
+g group_287
+f 1 2 3
+g group_288
+f 1 2 3
+g group_289
+f 1 2 3
+g group_290
+f 1 2 3
+g group_291
+f 1 2 3
+g group_292
+f 1 2 3
+g group_293
+f 1 2 3
+g group_294
+f 1 2 3
+g group_295
+f 1 2 3
+g group_296
+f 1 2 3
+g group_297
+f 1 2 3
+g group_298
+f 1 2 3
+g group_299
+f 1 2 3
+g group_300
+f 1 2 3

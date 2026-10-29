@@ -1,0 +1,12 @@
+mtllib 23_map_kd_edge.mtl
+v 0 0 0
+v 1 0 0
+v 0 1 0
+usemtl a
+f 1 2 3
+usemtl b
+f 1 2 3
+usemtl c
+f 1 2 3
+usemtl d
+f 1 2 3

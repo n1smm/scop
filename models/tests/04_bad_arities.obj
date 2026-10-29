@@ -1,0 +1,19 @@
+v 1 2
+v 1
+v
+vn 1 2
+vn 1
+vt 1
+vt
+f 1 2
+f 1
+f
+o
+g
+usemtl
+mtllib
+s
+v 1 2 3 4 5
+vt 0 0 9
+vn 0 0 1 0
+f 1 2 3 4 5 6

@@ -1,0 +1,7 @@
+mtllib first_missing.mtl
+mtllib this_file_does_not_exist.mtl
+mtllib my file with spaces.mtl
+v 0 0 0
+v 1 0 0
+v 0 1 0
+f 1 2 3

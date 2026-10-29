@@ -1,0 +1,8 @@
+mtllib 21_dup_material.mtl
+v 0 0 0
+v 1 0 0
+v 0 1 0
+usemtl dup
+f 1 2 3
+usemtl mat with space
+f 1 2 3

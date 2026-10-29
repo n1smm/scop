@@ -1,0 +1,6 @@
+v 0 0 0
+v 1.0 2.0 3.0
+vn 0 1 0
+vt 0.5 0.5
+vt 1 1
+# no faces at all - scene must end up empty, no crash
