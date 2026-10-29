@@ -267,6 +267,7 @@ void	Model::_loadMaterials(const mymodel::Scene *scene)
 
 	_textureList.resize(scene->mNumMaterials);
 	_colorList.resize(scene->mNumMaterials);
+	_tex_is_default.resize(scene->mNumMaterials);
 
 	for (size_t i = 0; i < scene->mNumMaterials; i++)
 	{
@@ -286,6 +287,7 @@ void	Model::_loadMaterials(const mymodel::Scene *scene)
 				std::string texPath = findTexturePath("textures", filename);
 
 				_textureList[i] = Texture(texPath.c_str());
+				_tex_is_default[i] = _textureList[i].isDefault();
 
 				if(!_textureList[i].isValid())
 				{

@@ -142,6 +142,7 @@ Texture::Texture(const char *filePath) : _texture_id(0)
 												, _width(0), _height(0), _bit_depth(0)
 												, _pixels(nullptr)
 												, _file_path(DEFAULT_TEX_PATH)
+												, _is_default(false)
 {
 	_file_path = filePath;
 	bool success = _loadTexture();
@@ -152,6 +153,7 @@ Texture::Texture(const char *filePath) : _texture_id(0)
 		_freeFileContent();
 		_file_path = DEFAULT_TEX_PATH;
 		success = _loadTexture();
+		_is_default = true;
 	}
 
 	if (!success)
@@ -167,6 +169,7 @@ Texture::Texture(Texture &&other)					noexcept
 					, _height(std::exchange(other._height, 0))
 					, _pixels(std::exchange(other._pixels, nullptr))
 					, _file_path(std::exchange(other._file_path, nullptr))
+
 {}
 
 Texture	&Texture::operator=(Texture &&other)			noexcept
@@ -181,6 +184,7 @@ Texture	&Texture::operator=(Texture &&other)			noexcept
 	_bit_depth		= std::exchange(other._bit_depth, 0);
 	_pixels			= std::exchange(other._pixels, nullptr);
 	_file_path		= std::exchange(other._file_path, nullptr);
+	_is_default		= std::exchange(other._is_default, false);
 
 	return *this;
 }
@@ -221,7 +225,8 @@ void	Texture::clearTexture()
 }
 
 //getter
-bool	Texture::isValid() const { return _texture_id != 0; }
+bool	Texture::isValid()		const { return _texture_id != 0; }
+bool	Texture::isDefault()	const { return _is_default; }
 
 
 /* private methods */

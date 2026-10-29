@@ -21,6 +21,7 @@ public:
 
 	//getter
 	bool	isValid()				const;
+	bool	isDefault()				const;
 
     ~Texture();
 
@@ -29,6 +30,7 @@ private:
 	int					_width, _height, _bit_depth;
 	unsigned	char	*_pixels;
 	const		char	*_file_path;
+	bool				_is_default;
 
 	bool			_loadFile(const char *filePath);
 	bool			_loadTexture();

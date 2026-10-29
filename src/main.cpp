@@ -103,22 +103,18 @@ int main(int argc, char **argv)
 				
 				mymath::mat4	model(1.0f);
 
-				// model = mymath::scale(model, mymath::vec3(1.0f, 1.0f, 1.0f));
-				
 				// x-wing transformation
 				mymath::vec3 original = mymath::vec3(1.0f, 1.0f, 1.0f);
-				// new_model.correctCenter(scalar);
-				model_center = new_model.getCenter();
-				(void)mouse_yaw; (void)mouse_pitch;
 				
-				model = mymath::translate(model, -(model_center * scalar));
+				// model = mymath::translate(model, (model_center * scalar));
 				model = mymath::scale(model, original * scalar);
 
 				// mouse rotation of model
 				// model = mymath::translate(model, model_center);
 				model = mymath::rotate(model, mymath::radians(mouse_yaw), mymath::vec3(0.0f, 1.0f, 0.0f));	
 				model = mymath::rotate(model, mymath::radians(mouse_pitch), mymath::vec3(1.0f, 0.0f, 0.0f));	
-				model = mymath::translate(model, mymath::vec3(0.0f, 0.0f, 0.0f));
+				model = mymath::translate(model, -(model_center));
+				// model = mymath::translate(model, mymath::vec3(0.0f, 0.0f, 0.0f));
 				// end of mouse rotation
 
 			

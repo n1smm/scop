@@ -41,11 +41,12 @@ std::string	readFromfile(const char *filePath)
 	}
 
 	std::string line = "";
-	while(!file_stream.eof())
+	while(std::getline(file_stream, line))
 	{
-		std::getline(file_stream, line);
 		content.append(line + "\n");
 		line = "";
+		if (file_stream.eof())
+			break;
 	}
 	file_stream.close();
 

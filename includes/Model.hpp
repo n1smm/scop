@@ -37,6 +37,7 @@ private:
 	SurfaceState				_current_surface;
 	bool						_space_latch;
 	bool						_bound_set;
+	std::vector<bool>			_tex_is_default;
 	std::vector<Mesh>			_meshList;
 	std::vector<Texture>		_textureList;
 	std::vector<mymath::vec3>	_colorList;
