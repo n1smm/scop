@@ -1,9 +1,11 @@
 
+CC       = gcc
 CXX      = g++
-CXXFLAGS = -Wall -Wextra -Werror -std=c++17 -Iincludes -Iexternal \
+CXXFLAGS = -Wall -Wextra -Werror -std=c++17 -Iincludes -Iexternal -Iexternal/glew/include \
+		   -DGLEW_STATIC -DGLEW_NO_GLU \
 		   -MMD -MP
 
-LDLIBS = -lglfw -lGLEW -lGL  \
+LDLIBS = -lglfw -lGL
 
 ROOT_NAME ?= scop
 NAME      = $(ROOT_NAME).a
@@ -11,6 +13,10 @@ HEADER    = includes/$(ROOT_NAME).h
 
 SRC_DIR   = src
 OBJ_DIR   = objs
+
+GLEW_DIR   = external/glew
+GLEW_SRC   = $(GLEW_DIR)/src/glew.c
+GLEW_FLAGS = -O2 -DGLEW_STATIC -DGLEW_NO_GLU -I$(GLEW_DIR)/include
 
 FILES_SRCS = src/main.cpp src/utils.cpp src/Window.cpp src/Camera.cpp src/Shader.cpp src/Mesh.cpp src/Texture.cpp src/Model.cpp src/mymath/mymath.cpp src/mymath/vec3.cpp src/mymath/mat4.cpp src/Importer.cpp
 
@@ -32,8 +38,8 @@ ifdef EXECUTABLE
 all: $(EXECUTABLE)
 endif
 
-$(NAME): $(FILES_OBJS)
-	ar rcs $(NAME) $(FILES_OBJS)
+$(NAME): $(FILES_OBJS) $(OBJ_DIR)/glew.o
+	ar rcs $(NAME) $(FILES_OBJS) $(OBJ_DIR)/glew.o
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp $(HEADER)
 	@mkdir -p $(dir $@)
@@ -43,14 +49,22 @@ $(BONUS_OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp $(HEADER)
 	@mkdir -p $(dir $@)
 	$(CXX) $(BONUS_CXXFLAGS) -c $< -o $@
 
-$(BONUS_EXECUTABLE): $(BONUS_OBJS)
-	$(CXX) -o $(BONUS_EXECUTABLE) $(BONUS_OBJS) $(LDLIBS)
+$(OBJ_DIR)/glew.o: $(GLEW_SRC)
+	@mkdir -p $(dir $@)
+	$(CC) $(GLEW_FLAGS) -c $< -o $@
+
+$(BONUS_OBJ_DIR)/glew.o: $(GLEW_SRC)
+	@mkdir -p $(dir $@)
+	$(CC) $(GLEW_FLAGS) -c $< -o $@
+
+$(BONUS_EXECUTABLE): $(BONUS_OBJS) $(BONUS_OBJ_DIR)/glew.o
+	$(CXX) -o $(BONUS_EXECUTABLE) $(BONUS_OBJS) $(BONUS_OBJ_DIR)/glew.o $(LDLIBS)
 
 bonus: $(BONUS_EXECUTABLE)
 
 ifdef EXECUTABLE
-$(EXECUTABLE): $(FILES_OBJS)
-	$(CXX) -o $(EXECUTABLE) $(FILES_OBJS) $(LDLIBS)
+$(EXECUTABLE): $(FILES_OBJS) $(OBJ_DIR)/glew.o
+	$(CXX) -o $(EXECUTABLE) $(FILES_OBJS) $(OBJ_DIR)/glew.o $(LDLIBS)
 endif
 
 VALGRIND_FLAGS = --leak-check=full \
@@ -76,7 +90,7 @@ run_check_bonus: $(BONUS_EXECUTABLE)
 	fi
 
 clean:
-	rm -f $(FILES_OBJS) $(FILES_DEPS) $(BONUS_OBJS) $(BONUS_DEPS)
+	rm -f $(FILES_OBJS) $(FILES_DEPS) $(BONUS_OBJS) $(BONUS_DEPS) $(OBJ_DIR)/glew.o $(BONUS_OBJ_DIR)/glew.o
 
 fclean: clean
 	rm -f $(NAME) $(EXECUTABLE) $(BONUS_EXECUTABLE)
