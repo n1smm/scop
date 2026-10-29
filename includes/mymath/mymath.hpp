@@ -1,9 +1,6 @@
 #ifndef MY_MATH_H
 #define MY_MATH_H
 
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
 // #include <GL/gl.h>
 #include <utility>
 
@@ -11,10 +8,6 @@
 #include "mat4.hpp"
 
 namespace mymath {
-	// using mat4 = glm::mat4;
-	// using vec3 = glm::vec3;
-	using vec4 = glm::vec4;
-
 
 	mat4	rotate(const mat4 &mat, float angle, const vec3 &axis);
 
@@ -36,12 +29,6 @@ namespace mymath {
 
 	float		*value_ptr(mat4 &m);
 	const float	*value_ptr(const mat4 &m);
-
-	// template	<typename T>
-	// inline	auto	value_ptr(T &&obj) -> decltype(glm::value_ptr(std::forward<T>(obj)))
-	// {
-	// 	return glm::value_ptr(std::forward<T>(obj));
-	// }
 }
 
 #endif
