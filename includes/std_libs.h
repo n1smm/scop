@@ -26,6 +26,7 @@
 #include <stdexcept>
 #include <exception>
 #include <limits>
+#include <optional>
 
 /* C standard library */
 

@@ -28,6 +28,8 @@ public:
 
 	mymath::vec3	getCameraPosition();
 	mymath::vec3	getCameraDirection();
+	GLfloat			getYawOut();
+	GLfloat			getPitchOut();
 
     ~Camera();
 
@@ -39,6 +41,8 @@ private:
 	mymath::vec3	_world_up;
 	GLfloat			_yaw;
 	GLfloat			_pitch;
+	GLfloat			_yaw_out;
+	GLfloat			_pitch_out;
 	GLfloat			_move_speed;
 	GLfloat			_turn_speed;
 

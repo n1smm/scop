@@ -1,18 +1,37 @@
 #include "mymath/mymath.hpp"
 #include "scop.h"
 
+std::optional<float> parse_float(std::string_view str)
+{
+	float value = 0.0f;
+	auto [ptr, er_code] = std::from_chars(str.data(), str.data() + str.size(), value);
+	if (er_code != std::errc(0) || ptr != str.data() + str.size())
+		return std::nullopt;
+	return value;
+}
 
 int main(int argc, char **argv) 
 {
 	try {
-		if (argc != 2)
+		if (argc < 2 || argc > 3)
 		{
-			std::cerr << "usage: ./scop <model.obj>" << std::endl;
+			std::cerr << "usage: ./scop <model.obj> <scalar;optional>" << std::endl;
 			return 1;
 		}
 		std::string model_path = std::string(argv[1]);
+
 		if (model_path.empty())
 			return 1;
+
+		GLfloat scalar = 1.0f;
+		if (argc == 3)
+		{
+			auto value = parse_float(argv[2]);
+			if (value)
+				scalar = value.value();
+		}
+				
+
 
 		Window mainWindow(WIDTH, HEIGHT);
 		if (mainWindow.initialize() != 0)
@@ -35,15 +54,18 @@ int main(int argc, char **argv)
 		returnTmpMesh(&mesh_list);
 		shader_list.emplace_back(vShaderPath, fShaderPath);
 
-		Camera	camera(mymath::vec3(0.0f, -0.5f, 3.0f),
+		Camera	camera(mymath::vec3(0.0f, 10.0f, 5.0f),
 					mymath::vec3(0.0f, 1.0f, 0.0f),
-					-90.0f, 0.0f, 10.0f, 0.5f);
+					-90.0f, -60.0f, 10.0f, 0.5f);
 
 
+		mymath::vec3	model_center = new_model.getCenter();
 		mymath::mat4	projection = mymath::perspective(45.0f, (GLfloat)buffer_width / (GLfloat)buffer_height, 0.1f, 100.0f);
 		GLint	uniform_model = 0, uniform_projection = 0, uniform_view = 0;
 		GLint	uniform_surface_switch = 0, uniform_in_color = 0;
+		GLfloat	mouse_pitch = 0.0f, mouse_yaw = 0.0f;
 		GLfloat	delta_time = 0.0f, last_time = 0.0f;
+
 
 		uniform_model = shader_list[0].getUniformModelLocation();
 		uniform_projection = shader_list[0].getUniformProjectionLocation();
@@ -75,18 +97,32 @@ int main(int argc, char **argv)
 				glUniformMatrix4fv(uniform_view, 1, GL_FALSE, mymath::value_ptr(camera.calculateViewMatrix()));
 				glUniform1i(uniform_surface_switch, static_cast<GLint>(new_model.getSurfaceState())); 
 
-
+				mouse_pitch = camera.getPitchOut();
+				mouse_yaw 	= camera.getYawOut();
+				
+				
 				mymath::mat4	model(1.0f);
-				// model = mymath::translate(model, mymath::vec3(0.0f, 0.4f, 0.0f));
-				// model = mymath::scale(model, mymath::vec3(0.4f, 0.4f, 1.0f));
-				// // model = mymath::rotate(model, mymath::radians(45), mymath::vec3(0.0f, 1.0f, 0.0f));
-				// glUniformMatrix4fv(uniform_model, 1, GL_FALSE, mymath::value_ptr(model));
-				// tex.useTexture(0);	
-				// mesh_list[0].renderMesh(Mesh::RenderMode::FILLED);
 
 				// model = mymath::scale(model, mymath::vec3(1.0f, 1.0f, 1.0f));
-				// model = mymath::translate(model, mymath::vec3(-70.0f, -10.0f, 50.0f));
-				// model = mymath::scale(model, mymath::vec3(0.05f, 0.05f, 0.05f));
+				
+				// x-wing transformation
+				mymath::vec3 original = mymath::vec3(1.0f, 1.0f, 1.0f);
+				// new_model.correctCenter(scalar);
+				model_center = new_model.getCenter();
+				(void)mouse_yaw; (void)mouse_pitch;
+				
+				model = mymath::translate(model, -(model_center * scalar));
+				model = mymath::scale(model, original * scalar);
+
+				// mouse rotation of model
+				// model = mymath::translate(model, model_center);
+				model = mymath::rotate(model, mymath::radians(mouse_yaw), mymath::vec3(0.0f, 1.0f, 0.0f));	
+				model = mymath::rotate(model, mymath::radians(mouse_pitch), mymath::vec3(1.0f, 0.0f, 0.0f));	
+				model = mymath::translate(model, mymath::vec3(0.0f, 0.0f, 0.0f));
+				// end of mouse rotation
+
+			
+				
 				glUniformMatrix4fv(uniform_model, 1, GL_FALSE, mymath::value_ptr(model));
 				new_model.renderModel(uniform_in_color);
 				

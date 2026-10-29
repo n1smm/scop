@@ -14,23 +14,13 @@ Camera::Camera(mymath::vec3	startPosition,
 	_move_speed	= startMoveSpeed;
 	_turn_speed	= startTurnSpeed;
 
+	_pitch_out	= 0.0f;
+	_yaw_out	= 0.0f;
+
 	_front		= mymath::vec3(0.0f, 0.0f, -1.0f);
 	_update();
 
 }
-
-// Camera::Camera(Camera&& other) noexcept 
-// 	: _position(std::exchange(other._position, mymath::vec3(0.0f, 0.0f, 0.0f)))
-// 	, _world_up(std::exchange(other._world_up, mymath::vec3(0.0f, 1.0f, 0.0f)))
-// {
-// }
-
-// Camera& Camera::operator=(Camera&& other) noexcept
-// {
-//     if (this != &other) {
-//     }
-//     return *this;
-// }
 
 
 void			Camera::keyControl(bool *keys, GLfloat deltaTime)
@@ -50,20 +40,28 @@ void			Camera::keyControl(bool *keys, GLfloat deltaTime)
 
 void			Camera::mouseControl(bool *mouse_event, GLfloat xChange, GLfloat yChange)
 {
-	if (!mouse_event[LEFT_BUTTON])
+	if (!(mouse_event[LEFT_BUTTON] || mouse_event[RIGHT_BUTTON]))
 		return ;
 
 	xChange *= _turn_speed;
 	yChange *= _turn_speed;
 
-	_yaw -= xChange;
-	_pitch += yChange;
+	if (mouse_event[LEFT_BUTTON])
+	{
+		_yaw -= xChange;
+		_pitch += yChange;
 
-	if (_pitch > 89.0f)
-		_pitch = 89.0f;
-	if (_pitch < -89.0f)
-		_pitch = -89.0f;
-	_update();
+		if (_pitch > 89.0f)
+			_pitch = 89.0f;
+		if (_pitch < -89.0f)
+			_pitch = -89.0f;
+		_update();
+	}
+	else
+	{
+		_yaw_out 	-= xChange;
+		_pitch_out	+= yChange;
+	}
 }
 
 mymath::mat4	Camera::calculateViewMatrix()
@@ -75,6 +73,9 @@ mymath::mat4	Camera::calculateViewMatrix()
 mymath::vec3	Camera::getCameraPosition() { return _position; }
 
 mymath::vec3	Camera::getCameraDirection() { return mymath::normalize(_front); }
+
+GLfloat			Camera::getYawOut() { return _yaw_out; }
+GLfloat			Camera::getPitchOut() { return _pitch_out; }
 
 /* private methods */
 
