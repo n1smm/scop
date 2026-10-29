@@ -1,6 +1,130 @@
-#define STB_IMAGE_IMPLEMENTATION
-#include	<stb_image.h>
+#ifdef STB_LOADER
+# define STB_IMAGE_IMPLEMENTATION
+# include <stb_image.h>
+#endif
+
 #include "Texture.hpp"
+
+#ifndef STB_LOADER
+static	uint32_t read_u32(const unsigned char *c)
+{
+	return c[0] | (c[1] << 8) | (c[2] << 16) | (c[3] << 24);
+}
+
+static uint16_t read_u16(const unsigned char *c)
+{
+	return (uint16_t)(c[0] | (c[1] << 8));
+}
+
+static int32_t read_i32(const unsigned char *c)
+{
+	int32_t value;
+	memcpy(&value, c, sizeof(value));   // preserves the sign bit
+	return value;
+}
+
+static void	bmpToRgba(const unsigned char *src, int bytePerPixel, unsigned char *dst)
+{
+	dst[0] = src[2];
+	dst[1] = src[1];
+	dst[2] = src[0];
+	dst[3] = (bytePerPixel == 4) ? src[3] : 255;
+}
+
+static bool	loadBmpFile(const char *filePath, int *width, int *height,
+						int *channels, unsigned char **pixels)
+{
+	std::ifstream file(filePath, std::ios::binary);
+	if (!file)
+	{
+		std::cerr << "failed to open texture; path: " << filePath << std::endl;
+		return false;
+	}
+
+	unsigned char header[14];
+	file.read(reinterpret_cast<char *>(header), sizeof(header));
+	if (!file || header[0] != 'B' || header[1] != 'M')
+	{
+		std::cerr << "unsupported, BMP only: " << filePath << std::endl;
+		return false;
+	}
+	const uint32_t pxl_offset = read_u32(header + 10);
+
+	unsigned char dib_size_read[4];
+	file.read(reinterpret_cast<char *>(dib_size_read), sizeof(dib_size_read));
+	if (!file)
+		return false;
+
+	const uint32_t dib_size = read_u32(dib_size_read);
+	if (dib_size < 40)
+	{
+		std::cerr << "unsupported, BMP header size: " << filePath << std::endl;
+		return false;
+	}
+
+	std::vector<unsigned char> dib(dib_size);
+	memcpy(dib.data(), dib_size_read, sizeof(dib_size_read));
+	file.read(reinterpret_cast<char *>(dib.data() + 4), dib_size - 4);
+	if (!file)
+		return false;
+
+	int width_ 			= read_i32(dib.data() +4);
+	int height_ 		= read_i32(dib.data() +8);
+	uint16_t bit_p_px 	= read_u16(dib.data() + 14);
+
+	if (bit_p_px != 24 && bit_p_px != 32)
+	{
+		std::cerr << "unsupported BMP bit depth: " << bit_p_px
+			<< " (only 24 and 32)" << std::endl;
+		return false;
+	}
+
+	bool topDown = (height_ < 0);
+
+	const int byte_p_px = bit_p_px / 8;
+	const int step = ((width_ * byte_p_px + 3) /4) * 4;
+
+	unsigned char *out = (unsigned char *)malloc((size_t)width_ * height_ * 4);
+	if (!out)
+		return false;
+
+	std::vector<unsigned char> row(step);
+
+	file.seekg(pxl_offset, std::ios::beg);
+	if (!file)
+	{
+		free(out);
+		return false;
+	}
+
+	for (int y = 0; y < height_; y++)
+	{
+		file.read(reinterpret_cast<char *>(row.data()), step);
+		if (!file)
+		{
+			std::cerr << "BMP ended unexpectedly at row " << y << std::endl;
+			free(out);
+			return false;
+		}
+
+		const int dstY = topDown ? y : (height_ - 1 - y);
+		unsigned char *dstRow = out + (size_t)dstY * width_ * 4;
+
+		for (int x = 0; x < width_; x++)
+		{
+			const unsigned char *src = row.data() + (size_t)x * byte_p_px;
+			unsigned char       *dst = dstRow + (size_t)x * 4;
+			bmpToRgba(src, byte_p_px, dst);
+		}
+	}
+
+	*width    = width_;
+	*height   = height_;
+	*channels = 4;
+	*pixels   = out;
+	return true;
+}
+#endif
 
 Texture::Texture() : _texture_id(0)
 						, _width(0), _height(0), _bit_depth(0)
@@ -104,6 +228,7 @@ bool	Texture::isValid() const { return _texture_id != 0; }
 
 bool			Texture::_loadFile(const char *filePath)
 {
+#ifdef STB_LOADER
 	unsigned char *tex_data = stbi_load(filePath, &_width, &_height, &_bit_depth, STBI_rgb_alpha);
 
 	if (!tex_data)
@@ -124,6 +249,26 @@ bool			Texture::_loadFile(const char *filePath)
 	_pixels = tex_data;
 
 	return true;
+#else
+	unsigned char *tex_data = nullptr;
+
+	if (!loadBmpFile(filePath, &_width, &_height, &_bit_depth, &tex_data))
+	{
+		_width = 0; _height = 0; _bit_depth = 0;
+		if (_pixels)
+		{
+			free(_pixels);
+			_pixels = nullptr;
+		}
+		return false;
+	}
+
+	if (_pixels)
+		free(_pixels);
+	_pixels = tex_data;
+
+	return true;
+#endif
 }
 
 bool			Texture::_loadTexture()
@@ -172,7 +317,11 @@ bool			Texture::_freeFileContent()
 	if (!_pixels)
 		return false;
 
+#ifdef STB_LOADER
 	stbi_image_free(_pixels);
+#else
+	free(_pixels);
+#endif
 	_pixels = nullptr;
 	return true;
 }

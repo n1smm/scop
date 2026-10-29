@@ -35,13 +35,13 @@ static std::string findTexturePath(const std::string& dir, const std::string& fi
             }
         }
         if (!found)
-            return exact.string(); // let loadTexture() report the failure
+            return exact.string();
     }
     return current.string();
 }
 
 
-Model::Model(const char *filePath) : _isLoaded(false), _current_surface(SurfaceState::TEXTURE), _space_latch(false)
+Model::Model(const char *filePath) : _isLoaded(false), _current_surface(SurfaceState::TEXTURE), _space_latch(false), _bound_set(false)
 {
 	_loadModel(filePath);
 }
@@ -85,9 +85,12 @@ void	Model::clearModel()
 	_mesh_to_tex.clear();
 }
 
+// getters and setters
 bool			Model::isValid() const { return _isLoaded; }
 
 SurfaceState	Model::getSurfaceState() const { return _current_surface; }
+
+mymath::vec3	Model::getCenter() const { return _center; }
 
 void			Model::setSurfaceState(bool *keys)
 { 
@@ -100,6 +103,11 @@ void			Model::setSurfaceState(bool *keys)
 	}
 	_space_latch = space_key;
 
+}
+
+void			Model::correctCenter(GLfloat scalar)
+{
+	_center = _center * scalar;
 }
 
 
@@ -124,6 +132,7 @@ void	Model::_loadModel(const char *filePath)
 
 	_loadNode(scene->mRootNode, scene);
 	_loadMaterials(scene);
+	_center = (_min + _max) * 0.5f;
 	_isLoaded = true;
 }
 
@@ -166,12 +175,29 @@ void	Model::_loadMesh(mymodel::Mesh *mesh, const mymodel::Scene *scene)
 	std::vector<GLfloat> vertices;
 	std::vector<unsigned int> indices;
 
+	mymath::vec3 max;
+	mymath::vec3 min;
+	bool		 first = true;
+
 
 	for (size_t i = 0; i < mesh->mNumVertices; i++)
 	{
 		vertices.insert(vertices.end(), { mesh->mVertices[i].x,
 	  									  mesh->mVertices[i].y,
 	  									  mesh->mVertices[i].z });
+	  	float x = mesh->mVertices[i].x;
+	  	float y = mesh->mVertices[i].y;
+	  	float z = mesh->mVertices[i].z;
+		if (first)
+		{
+			min = max = mymath::vec3(x, y, z);
+			first = false;
+		}
+		else
+		{
+			min = mymath::vec3(std::min(min.x, x), std::min(min.y, y), std::min(min.z, z));
+			max = mymath::vec3(std::max(max.x, x), std::max(max.y, y), std::max(max.z, z));
+		}
 
 		if (mesh->mTextureCoords[0] && mesh->mTexValid)
 			vertices.insert(vertices.end(), { mesh->mTextureCoords[0][i].x,
@@ -218,6 +244,20 @@ void	Model::_loadMesh(mymodel::Mesh *mesh, const mymodel::Scene *scene)
 	new_mesh.createMesh(&vertices[0], &indices[0], vertices.size(), indices.size());
 	_meshList.push_back(std::move(new_mesh));
 	_mesh_to_tex.push_back(mesh->mMaterialIndex);
+
+	if (!_bound_set)
+	{
+		_min = min;
+		_max = max;
+		_bound_set = true;
+	}
+	else
+	{
+		_min = mymath::vec3(std::min(min.x, _min.x), std::min(min.y, _min.y), std::min(min.z, _min.z));
+		_max = mymath::vec3(std::max(max.x, max.x), std::max(max.y, max.y), std::max(max.z, max.z));
+	}
+
+	_center = (min + max) * 0.5f;
 }
 
 void	Model::_loadMaterials(const mymodel::Scene *scene)

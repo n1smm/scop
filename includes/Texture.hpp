@@ -4,6 +4,7 @@
 #include	<GL/glew.h>
 #include	"std_libs.h"
 #include	"common_values.h"
+#include	"utils.h"
 
 class Texture {
 public:
