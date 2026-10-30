@@ -52,3 +52,31 @@
   ...
   obj:/usr/lib/x86_64-linux-gnu/libglfw.so*
 }
+
+{
+  <glibc rtld _dl_find_object_update (known false positive)>
+  Memcheck:Leak
+  match-leak-kinds: definite
+  fun:malloc
+  ...
+  fun:_dl_find_object_update
+}
+
+{
+  <libdbus one-time process-wide allocations>
+  Memcheck:Leak
+  match-leak-kinds: definite,indirect
+  ...
+  obj:*/libdbus-1.so*
+}
+
+{
+  <nvidia shader disk cache writes uninitialised padding>
+  Memcheck:Param
+  write(buf)
+  fun:write
+  ...
+  fun:fwrite
+  ...
+  obj:*/libnvidia-glcore.so*
+}

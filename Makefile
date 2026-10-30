@@ -1,6 +1,6 @@
 
-CC       = gcc
-CXX      = g++
+CC       = c++
+CXX      = c++
 CXXFLAGS = -Wall -Wextra -Werror -std=c++17 -Iincludes -Iexternal -Iexternal/glew/include \
 		   -DGLEW_STATIC -DGLEW_NO_GLU \
 		   -MMD -MP
