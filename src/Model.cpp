@@ -47,7 +47,7 @@ Model::Model(const char *filePath) : _isLoaded(false), _current_surface(SurfaceS
 }
 
 /* public methods */
-void	Model::renderModel(GLint inColorLocation)
+void	Model::renderModel(GLint inColorLocation, SurfaceState surface)
 {
 	if (!_isLoaded)
 		return ;
@@ -67,11 +67,11 @@ void	Model::renderModel(GLint inColorLocation)
 				glUniform3f(inColorLocation, tmp.x, tmp.y, tmp.z);
 			}
 		}
-		if (_current_surface == SurfaceState::TEXTURE || _current_surface == SurfaceState::COLOR)
+		if (surface == SurfaceState::TEXTURE || surface == SurfaceState::COLOR)
 			_meshList[i].renderMesh(Mesh::RenderMode::FILLED);
-		if (_current_surface == SurfaceState::WIREFRAME)
+		if (surface == SurfaceState::WIREFRAME)
 			_meshList[i].renderMesh(Mesh::RenderMode::WIREFRAME);
-		if (_current_surface == SurfaceState::POINT)
+		if (surface == SurfaceState::POINT)
 			_meshList[i].renderMesh(Mesh::RenderMode::POINTS);
 	}
 

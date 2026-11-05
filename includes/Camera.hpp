@@ -10,6 +10,14 @@
 
 class Camera {
 public:
+
+	enum MouseEvent {
+		MOUSE_FIRST_MOVED,
+		LEFT_BUTTON,
+		RIGHT_BUTTON,
+		MIDDLE_BUTTON
+	};
+
     Camera(mymath::vec3	startPosition,
 		   mymath::vec3	startUp,
 		   GLfloat		startYaw,
@@ -46,12 +54,6 @@ private:
 	GLfloat			_move_speed;
 	GLfloat			_turn_speed;
 
-	enum MouseEvent {
-		MOUSE_FIRST_MOVED,
-		LEFT_BUTTON,
-		RIGHT_BUTTON,
-		MIDDLE_BUTTON
-	};
 
 	void			_update();
 };

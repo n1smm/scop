@@ -8,6 +8,14 @@
 
 class Window {
 public:
+
+	enum MouseEvent {
+		MOUSE_FIRST_MOVED,
+		LEFT_BUTTON,
+		RIGHT_BUTTON,
+		MIDDLE_BUTTON
+	};
+
     Window();
     Window(GLint windowWidth, GLint windowHeight);
     Window(const Window& other)			= delete;
@@ -36,12 +44,6 @@ private:
 	bool			_keys[1024];
 	bool			_mouse_events[10];
 
-	enum MouseEvent {
-		MOUSE_FIRST_MOVED,
-		LEFT_BUTTON,
-		RIGHT_BUTTON,
-		MIDDLE_BUTTON
-	};
 
 	void			_createCallBacks();
 	static	void	_handleKeys(GLFWwindow *win, int key, int code, int action, int mode);

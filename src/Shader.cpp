@@ -11,6 +11,7 @@ Shader::Shader(const char *vertexCodePath, const char *fragmentCodePath)
 	_uniform_view = 0;
 	_uniform_surface_switch = 0;
 	_uniform_in_color = 0;
+	_uniform_time = 0;
 
 
 	std::string vertexContent = readFromfile(vertexCodePath);
@@ -34,6 +35,7 @@ Shader::Shader(Shader&& other) noexcept
 	, _uniform_model(std::exchange(other._uniform_model, 0))
 	, _uniform_projection(std::exchange(other._uniform_projection, 0))
 	, _uniform_view(std::exchange(other._uniform_view, 0))
+	, _uniform_time(std::exchange(other._uniform_time, 0))
 	, _uniform_surface_switch(std::exchange(other._uniform_surface_switch, 1))
 	, _uniform_in_color(std::exchange(other._uniform_in_color, 0))
 	, _uniform_values(std::move(other._uniform_values))
@@ -56,6 +58,7 @@ Shader& Shader::operator=(Shader&& other) noexcept
 	_uniform_surface_switch	= std::exchange(other._uniform_surface_switch, 1);
 	_uniform_in_color		= std::exchange(other._uniform_in_color, 0);
 	_uniform_values			= std::move(other._uniform_values);
+	_uniform_time			= std::exchange(other._uniform_time, 0);
 
 	return *this;
 }
@@ -84,6 +87,7 @@ void	Shader::clearshader()
 	_uniform_view = 0;
 	_uniform_surface_switch = 0;
 	_uniform_in_color = 0;
+	_uniform_time = 0;
 }
 
 void	Shader::setSurfaceState(SurfaceState newState) { _surface_state = newState; }
@@ -95,6 +99,7 @@ GLint	Shader::getUniformProjectionLocation() { return _uniform_projection; }
 GLint	Shader::getUniformViewLocation() { return _uniform_view; }
 GLint	Shader::getUniformSurfaceSwitchLocation() { return _uniform_surface_switch; }
 GLint	Shader::getUniformInColorLocation() { return _uniform_in_color; }
+GLint	Shader::getUniformTimeLocation() { return _uniform_time; }
 
 
 /* private methods */
@@ -148,6 +153,8 @@ void	Shader::_compileShader(const char *vertexCode, const char *fragmentCode)
 	_uniform_surface_switch = glGetUniformLocation(_shader_id, "surfaceSwitch");
 	_uniform_values.push_back(_uniform_surface_switch);
 	_uniform_in_color = glGetUniformLocation(_shader_id, "inColor");
+	_uniform_time = glGetUniformLocation(_shader_id, "uTime");
+	_uniform_values.push_back(_uniform_time);
 
 	for(size_t i = 0; i < _uniform_values.size(); i++)
 	{

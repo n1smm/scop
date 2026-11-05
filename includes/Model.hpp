@@ -18,7 +18,7 @@ public:
     Model(Model&& other)					noexcept = default;
     Model& operator=(Model&& other)			noexcept = default;
 
-	void	renderModel(GLint inColorLocation);
+	void	renderModel(GLint inColorLocation, SurfaceState surface);
 	void	clearModel();
 
 	bool			isValid() const;

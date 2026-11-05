@@ -19,6 +19,7 @@ public:
 	GLint	getUniformSurfaceSwitchLocation();
 	GLint	getUniformViewLocation();
 	GLint	getUniformInColorLocation();
+	GLint	getUniformTimeLocation();
 
 	void	useShader();
 	void	clearshader();
@@ -31,7 +32,7 @@ private:
 	GLuint				_shader_id;
 	unsigned int		_shader_status;
 	SurfaceState		_surface_state;
-	GLint				_uniform_model, _uniform_projection, _uniform_view;
+	GLint				_uniform_model, _uniform_projection, _uniform_view, _uniform_time;
 	GLint				_uniform_surface_switch, _uniform_in_color;
 	std::vector<GLint>	_uniform_values;
 

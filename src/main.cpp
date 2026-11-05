@@ -61,10 +61,16 @@ int main(int argc, char **argv)
 
 		mymath::vec3	model_center = new_model.getCenter();
 		mymath::mat4	projection = mymath::perspective(45.0f, (GLfloat)buffer_width / (GLfloat)buffer_height, 0.1f, 100.0f);
-		GLint	uniform_model = 0, uniform_projection = 0, uniform_view = 0;
+		GLint	uniform_model = 0, uniform_projection = 0, uniform_view = 0, uniform_time = 0;
 		GLint	uniform_surface_switch = 0, uniform_in_color = 0;
 		GLfloat	mouse_pitch = 0.0f, mouse_yaw = 0.0f;
-		GLfloat	delta_time = 0.0f, last_time = 0.0f;
+		GLfloat	delta_time = 0.0f, last_time = 0.0f, transition_start = 0.0f;
+		const GLfloat duration = 1.0f;
+		SurfaceState curr_state = new_model.getSurfaceState();
+		SurfaceState new_state = curr_state;
+		bool transition_active = false;
+		bool initial_wipe = true;
+
 
 
 		uniform_model = shader_list[0].getUniformModelLocation();
@@ -72,9 +78,11 @@ int main(int argc, char **argv)
 		uniform_view = shader_list[0].getUniformViewLocation();
 		uniform_surface_switch = shader_list[0].getUniformSurfaceSwitchLocation();
 		uniform_in_color = shader_list[0].getUniformInColorLocation();
+		uniform_time = shader_list[0].getUniformTimeLocation();
 
 
-		last_time = glfwGetTime();
+		transition_start = last_time = glfwGetTime();
+		transition_active = true;
 		while(!mainWindow.getWindowShouldClose())
 		{
 			GLfloat	now = glfwGetTime();
@@ -82,7 +90,17 @@ int main(int argc, char **argv)
 			last_time = now;
 
 			glfwPollEvents();
+			SurfaceState prev_state = new_model.getSurfaceState();
 			new_model.setSurfaceState(mainWindow.getKeys());	
+			SurfaceState state_now = new_model.getSurfaceState();
+			if (state_now != prev_state)
+			{
+				curr_state = prev_state;
+				new_state = state_now;
+				transition_start = last_time;
+				transition_active = true;
+				initial_wipe = false;
+			}
 			camera.keyControl(mainWindow.getKeys(), delta_time);
 			camera.mouseControl(mainWindow.getMouseEvents(),
 					   		mainWindow.getXchange(),
@@ -93,6 +111,7 @@ int main(int argc, char **argv)
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 			shader_list[0].useShader();
+				glUniform1f(uniform_time, static_cast<GLfloat>(now - transition_start));
 				glUniformMatrix4fv(uniform_projection, 1, GL_FALSE, mymath::value_ptr(projection));
 				glUniformMatrix4fv(uniform_view, 1, GL_FALSE, mymath::value_ptr(camera.calculateViewMatrix()));
 				glUniform1i(uniform_surface_switch, static_cast<GLint>(new_model.getSurfaceState())); 
@@ -118,10 +137,43 @@ int main(int argc, char **argv)
 				// end of mouse rotation
 
 			
-				
 				glUniformMatrix4fv(uniform_model, 1, GL_FALSE, mymath::value_ptr(model));
-				new_model.renderModel(uniform_in_color);
-				
+
+
+				GLfloat progress = std::clamp((now - transition_start) / duration, 0.0f, 1.0f);
+
+				if (!transition_active)
+				{
+					// glEnable(GL_SCISSOR_TEST);
+					// glScissor(200, 200, buffer_width - 500, buffer_height - 300);
+					glUniform1i(uniform_surface_switch, static_cast<GLint>(new_state));
+					new_model.renderModel(uniform_in_color, new_state);
+					// glDisable(GL_SCISSOR_TEST);
+				}
+				else
+				{
+					glEnable(GL_SCISSOR_TEST);
+					GLsizei edge = static_cast<GLsizei>(progress * buffer_width);
+					glScissor(0, 0, edge, buffer_height);
+					glUniform1i(uniform_surface_switch, static_cast<GLint>(new_state));
+					new_model.renderModel(uniform_in_color, new_state);
+					if (!initial_wipe)
+					{
+						GLsizei edge = static_cast<GLsizei>(progress * buffer_width);
+						glScissor(edge, 0, buffer_width - edge, buffer_height);
+						glUniform1i(uniform_surface_switch, static_cast<GLint>(curr_state));
+						new_model.renderModel(uniform_in_color, curr_state);
+					}
+
+					glDisable(GL_SCISSOR_TEST);
+
+					if (progress >= 1.0f)
+					{
+						transition_active = false;
+						initial_wipe = false;
+						curr_state = new_state;
+					}
+				}
 				
 
 			glUseProgram(0);

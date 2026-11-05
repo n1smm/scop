@@ -9,12 +9,14 @@ uniform	mat4	view;
 uniform	vec3	inColor;
 
 uniform int		surfaceSwitch;
+uniform	float	uTime;
 
 
 out		vec4	vertexColor;	
 out		vec2	texCoordinate;
 out		vec3	bary;
 flat out int	surfaceSwitchPass;
+flat out float	runTime;
 
 void	main()
 {
@@ -29,4 +31,5 @@ void	main()
 
 	texCoordinate = tex;
 	surfaceSwitchPass = surfaceSwitch;
+	runTime = uTime;
 }
